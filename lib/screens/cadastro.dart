@@ -13,9 +13,9 @@ class Cadastro extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ElevatedButton(
-            child: const Text("Cadastro Básico"),
-            onPressed: () {
+          ListTile(
+            title: const Text('Cadastro Básico'),
+            onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const CadastroBasico(),
@@ -23,9 +23,9 @@ class Cadastro extends StatelessWidget {
               );
             },
           ),
-          ElevatedButton(
-            child: const Text("Cadastro Modelos"),
-            onPressed: () {
+          ListTile(
+            title: const Text('Cadastro Modelos'),
+            onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const CadastroModelos(),

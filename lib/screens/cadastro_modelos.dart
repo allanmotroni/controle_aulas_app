@@ -14,9 +14,9 @@ class CadastroModelos extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ElevatedButton(
-            child: const Text("Escola"),
-            onPressed: () {
+          ListTile(
+            title: const Text("Escola"),
+            onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const ListaModeloEscola(),
@@ -24,9 +24,9 @@ class CadastroModelos extends StatelessWidget {
               );
             },
           ),
-          ElevatedButton(
-            child: const Text("Oficina"),
-            onPressed: () {
+          ListTile(
+            title: const Text("Oficina"),
+            onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const ListaModeloOficina(),
@@ -34,9 +34,9 @@ class CadastroModelos extends StatelessWidget {
               );
             },
           ),
-          ElevatedButton(
-            child: const Text("Turma"),
-            onPressed: () {
+          ListTile(
+            title: const Text("Turma"),
+            onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const ListaModeloTurma(),

@@ -96,3 +96,64 @@ TODO:
 	- Tela de lista de planejamentos;
 	- Formulário de planejamento;
 	- Planejamento da semana;
+	- Mudar para Provider
+		OK* Escola;
+		OK* Oficina;
+		OK* Turma;
+		* Modelo Escola;
+		* Modelo Oficina;
+		* Modelo Turma;
+		* Planejamento dia;
+		* Planejamento semana;
+	- Melhorar Menus
+		OK* Menu;
+		OK* Cadastro básico;
+		OK* Cadastro modelos;
+	- Validar dependências antes de excluir
+		OK* Escola;
+		OK* Oficina;
+		OK* Modelo;
+		* Modelo Escola;
+		* Modelo Oficina;
+		* Modelo Turma;
+	- Tela total de aulas filtrando por período;
+	- Tela de Configuração básica (hora padrão / valor padrão)
+		* Preencher com esses dados a tela de Modelo Oficinas;	
+	- Listar apenas itens ativos
+		* Modelo Escola;
+		* Modelo Oficina;
+		* Modelo Turma;
+
+Testes
+
+Cadastro básico
+
+	Escola 01
+	Escola 02
+	Escola 03
+
+	Oficina 1
+	Oficina 2
+
+	Turma 1
+	Turma 2
+	Turma 3
+
+Modelo Escola
+
+	Escola 01 - segunda
+	Escola 02 - terça
+	Escola 03 - terça
+
+Modelo Oficina
+	
+	Oficina 1 - Escola 01 - segunda
+	Oficina 2 - Escola 01 - segunda
+	Oficina 1 - Escola 03 - terça
+
+Modelo Turma
+
+	Turma 1 - Oficina 1 - Escola 01 - segunda
+	Turma 1 - Oficina 2 - Escola 01 - segunda
+	Turma 1 - Oficina 2 - Escola 01 - segunda
+	

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class ListaPlanejamentoSemana extends StatefulWidget {
   final DateTime dataFiltro;
-  const ListaPlanejamentoSemana(this.dataFiltro, {super.key});
+  const ListaPlanejamentoSemana({super.key, required this.dataFiltro});
 
   @override
   State<ListaPlanejamentoSemana> createState() =>

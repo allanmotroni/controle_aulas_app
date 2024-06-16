@@ -4,6 +4,7 @@ import 'package:controle_aulas_app/database/dao/modelo_oficina_dao.dart';
 import 'package:controle_aulas_app/models/modelo_escola.dart';
 import 'package:controle_aulas_app/models/oficina.dart';
 import 'package:controle_aulas_app/models/modelo_oficina.dart';
+import 'package:controle_aulas_app/utils/configuracao.dart';
 import 'package:controle_aulas_app/utils/utils.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,9 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
       _duracaoController.text = widget.modeloOficina!.duracao.toString();
       _valorController.updateValue(widget.modeloOficina!.valor);
       _ativo = widget.modeloOficina!.ativo;
+    } else {
+      _duracaoController.text = Configuracao.duracaoAulas.toString();
+      _valorController.updateValue(Configuracao.valorHoraAula);
     }
   }
 
@@ -62,13 +66,13 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
     }
   }
 
-  void confirma() {
+  Future<void> confirmaAsync() async {
     if (widget.acaoTela == EnumAcaoTela.incluir) {
-      inclui();
+      await incluiAsync();
     } else if (widget.acaoTela == EnumAcaoTela.alterar) {
-      altera();
+      await alteraAsync();
     } else if (widget.acaoTela == EnumAcaoTela.excluir) {
-      exclui();
+      await excluiAsync();
     }
   }
 
@@ -85,7 +89,7 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
         ativo);
   }
 
-  void inclui() async {
+  Future<void> incluiAsync() async {
     if (validacao()) {
       final ModeloOficina model = cria();
       await _modeloOficinaDao.inclui(model);
@@ -93,7 +97,7 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
     }
   }
 
-  void altera() async {
+  Future<void> alteraAsync() async {
     if (validacao()) {
       final ModeloOficina model = cria();
       await _modeloOficinaDao.altera(model);
@@ -101,7 +105,7 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
     }
   }
 
-  void exclui() async {
+  Future<void> excluiAsync() async {
     if (widget.modeloOficina!.id > 0) {
       await _modeloOficinaDao.exclui(widget.modeloOficina!.id);
       volta();
@@ -196,86 +200,101 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
         padding: const EdgeInsets.only(left: 24.0, right: 24.0),
         child: Column(
           children: [
-            Row(
-              children: [
-                Flexible(
-                  child: DropdownButtonFormField<int>(
-                    key: UniqueKey(),
-                    isDense: false,
-                    value: _modeloEscolaIdSelecionado,
-                    items: _modeloEscolas.isEmpty
-                        ? null
-                        : _modeloEscolas.map((ModeloEscola modeloEscola) {
-                            return DropdownMenuItem<int>(
-                              value: modeloEscola.id,
-                              child: Text(
-                                  "${modeloEscola.escola!.nome}\n${modeloEscola.diaSemanaDescricao()}"),
-                            );
-                          }).toList(),
-                    onChanged: _camposAtivos ? modeloEscolaIdChanged : null,
-                    decoration:
-                        const InputDecoration(labelText: 'Modelo Escola'),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Flexible(
-                  child: DropdownButtonFormField<int>(
-                    key: UniqueKey(),
-                    value: _oficinaIdSelecionado,
-                    items: _oficinas.isEmpty
-                        ? null
-                        : _oficinas.map((Oficina oficina) {
-                            return DropdownMenuItem<int>(
-                              value: oficina.id,
-                              child: Text(oficina.nome),
-                            );
-                          }).toList(),
-                    onChanged: _camposAtivos ? oficinaIdChanged : null,
-                    decoration: const InputDecoration(labelText: 'Oficina'),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Flexible(
-                  child: TextField(
-                    controller: _duracaoController,
-                    enabled: _camposAtivos,
-                    maxLength: 3,
-                    decoration: const InputDecoration(labelText: 'Duração'),
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Flexible(
-                  child: TextField(
-                    controller: _valorController,
-                    enabled: _camposAtivos,
-                    decoration: const InputDecoration(labelText: 'Valor'),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: DropdownButtonFormField<int>(
+                      key: UniqueKey(),
+                      isDense: false,
+                      value: _modeloEscolaIdSelecionado,
+                      items: _modeloEscolas.isEmpty
+                          ? null
+                          : _modeloEscolas.map((ModeloEscola modeloEscola) {
+                              return DropdownMenuItem<int>(
+                                value: modeloEscola.id,
+                                child: Text(
+                                    "${modeloEscola.escola!.nome}\n${modeloEscola.diaSemanaDescricao()}"),
+                              );
+                            }).toList(),
+                      onChanged: _camposAtivos ? modeloEscolaIdChanged : null,
+                      decoration:
+                          const InputDecoration(labelText: 'Modelo Escola'),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            Row(
-              children: [
-                Flexible(
-                  child: Switch(
-                    value: _ativo,
-                    activeColor: const Color.fromARGB(255, 3, 82, 6),
-                    onChanged: _camposAtivos ? ativoChanged : null,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: DropdownButtonFormField<int>(
+                      key: UniqueKey(),
+                      value: _oficinaIdSelecionado,
+                      items: _oficinas.isEmpty
+                          ? null
+                          : _oficinas.map((Oficina oficina) {
+                              return DropdownMenuItem<int>(
+                                value: oficina.id,
+                                child: Text(oficina.nome),
+                              );
+                            }).toList(),
+                      onChanged: _camposAtivos ? oficinaIdChanged : null,
+                      decoration: const InputDecoration(labelText: 'Oficina'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      controller: _duracaoController,
+                      enabled: _camposAtivos,
+                      maxLength: 3,
+                      decoration: const InputDecoration(labelText: 'Duração'),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      controller: _valorController,
+                      enabled: _camposAtivos,
+                      decoration: const InputDecoration(labelText: 'Valor'),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Switch(
+                      value: _ativo,
+                      activeColor: const Color.fromARGB(255, 3, 82, 6),
+                      onChanged: _camposAtivos ? ativoChanged : null,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -283,7 +302,7 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
                 Visibility(
                   visible: _botaoConfirmarVisivel,
                   child: ElevatedButton(
-                    onPressed: () => confirma(),
+                    onPressed: () async => confirmaAsync(),
                     child: const Text('Confirmar'),
                   ),
                 ),
