@@ -1,5 +1,10 @@
-import 'package:controle_aulas_app/screens/planejamento_semana/lista_planejamento_semana.dart';
+import 'dart:io';
+
+import 'package:controle_aulas_app/components/hamburger_menu.dart';
+import 'package:controle_aulas_app/components/hamburger_menu_item.dart';
 import 'package:controle_aulas_app/screens/cadastro.dart';
+import 'package:controle_aulas_app/screens/configura%C3%A7%C3%B5es/formulario_configuracoes.dart';
+import 'package:controle_aulas_app/screens/planejamento_semana/lista_planejamento_semana.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
@@ -11,39 +16,30 @@ class Menu extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Menu"),
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              ElevatedButton(
-                child: const Text("Cadastro"),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const Cadastro(),
-                    ),
-                  );
-                },
-              ),
-            ],
+      drawer: HamburgerMenu(
+        widgets: [
+          const HamburgerMenuItem(title: 'Cadastro', widget: Cadastro()),
+          const Divider(),
+          HamburgerMenuItem(
+              title: 'Planejamento Semana',
+              widget: ListaPlanejamentoSemana(
+                dataFiltro: DateTime.now(),
+              )),
+          const Divider(),
+          const HamburgerMenuItem(
+              title: 'Configurações', widget: FormularioConfiguracoes()),
+          const Divider(),
+          ListTile(
+            title: const Text('Sair'),
+            onTap: () {
+              //SystemNavigator.pop();
+              exit(0);
+            },
           ),
-          Row(
-            children: [
-              ElevatedButton(
-                child: const Text("Planejamento Semana"),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ListaPlanejamentoSemana(DateTime.now()),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+          const Divider(),
         ],
       ),
+      body: const Text(''),
     );
   }
 }
