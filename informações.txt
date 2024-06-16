@@ -1,0 +1,98 @@
+Controle de aulas
+
+| Escola |
+	| Oficina |
+		| Turma |
+
+---
+
+Escola 1 - Oficina 1 - 12h
+Escola 1 - Oficina 2 - 6h
+
+---
+
+Oficina 1 - 40h
+Oficina 2 - 37h
+
+---
+
+Cadastro básico
+
+	Escola - Oficina - Turma
+
+Cadastro template básico
+
+	Template Escola - Template Oficina - Template Turma
+
+Cadastro
+
+	Planejamento
+
+Tabelas
+
+	==========
+	= escola =
+	==========
+	id
+	nome
+	observação
+	ativo
+	
+	===========
+	= oficina =
+	===========
+	id
+	nome
+	observacao
+	ativo
+	
+	=========
+	= turma =
+	=========
+	id
+	nome
+	observação
+	ativo
+	
+	=================
+	= modelo_escola =
+	=================
+	id
+	dia_semana
+	escola_id
+	ativo
+	
+	==================
+	= modelo_oficina =
+	==================
+	id
+	modelo_escola_id
+	oficina_id
+	duracao
+	valor
+	ativo
+		
+	================
+	= modelo_turma =
+	================
+	id
+	modelo_oficina_id
+	turma_id
+	ativo
+	
+	================
+	= planejamento =
+	================
+	id
+	modelo_turma_id
+	data
+	concluido
+	ativo
+
+TODO:
+
+	- Validação de não permitir incluir duplicado;
+	- Tela de Menu Planejamento;
+	- Tela de lista de planejamentos;
+	- Formulário de planejamento;
+	- Planejamento da semana;
