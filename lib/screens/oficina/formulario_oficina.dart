@@ -1,9 +1,11 @@
-import 'package:controle_aulas_app/database/dao/oficina_dao.dart';
 import 'package:controle_aulas_app/models/oficina.dart';
+import 'package:controle_aulas_app/providers/oficina_provider.dart';
 import 'package:controle_aulas_app/services/oficina_service.dart';
+import 'package:controle_aulas_app/utils/alerta.dart';
 import 'package:controle_aulas_app/utils/utils.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FormularioOficina extends StatefulWidget {
   final EnumAcaoTela acaoTela;
@@ -20,7 +22,6 @@ class _FormularioOficinaState extends State<FormularioOficina> {
   late bool _camposAtivos;
   late bool _botaoConfirmarVisivel;
 
-  final OficinaDao _oficinaDao = OficinaDao();
   final OficinaService _oficinaService = OficinaService();
 
   final TextEditingController _nomeController = TextEditingController();
@@ -54,6 +55,11 @@ class _FormularioOficinaState extends State<FormularioOficina> {
     } else if (widget.acaoTela == EnumAcaoTela.excluir) {
       if (await _oficinaService.naoPossuiDependenciaAsync(widget.oficina!.id)) {
         await excluiAsync();
+      } else {
+        if (mounted) {
+          Alerta(context).erro(
+              "Não é possível excluir a Oficina pois ela está sendo utilizada em um modelo.");
+        }
       }
     }
   }
@@ -72,7 +78,7 @@ class _FormularioOficinaState extends State<FormularioOficina> {
   Future<void> incluiAsync() async {
     if (validacao()) {
       final Oficina oficina = cria();
-      await _oficinaDao.inclui(oficina);
+      await context.read<OficinaProvider>().incluiAsync(oficina);
       volta();
     }
   }
@@ -80,14 +86,14 @@ class _FormularioOficinaState extends State<FormularioOficina> {
   Future<void> alteraAsync() async {
     if (validacao()) {
       final Oficina oficina = cria();
-      await _oficinaDao.altera(oficina);
+      await context.read<OficinaProvider>().alteraAsync(oficina);
       volta();
     }
   }
 
   Future<void> excluiAsync() async {
     if (widget.oficina!.id > 0) {
-      await _oficinaDao.exclui(widget.oficina!.id);
+      await context.read<OficinaProvider>().excluiAsync(widget.oficina!);
       volta();
     }
   }

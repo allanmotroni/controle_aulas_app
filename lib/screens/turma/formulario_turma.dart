@@ -1,9 +1,11 @@
-import 'package:controle_aulas_app/database/dao/turma_dao.dart';
 import 'package:controle_aulas_app/models/turma.dart';
+import 'package:controle_aulas_app/providers/turma_provider.dart';
 import 'package:controle_aulas_app/services/turma_service.dart';
+import 'package:controle_aulas_app/utils/alerta.dart';
 import 'package:controle_aulas_app/utils/utils.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FormularioTurma extends StatefulWidget {
   final EnumAcaoTela acaoTela;
@@ -20,7 +22,6 @@ class _FormularioTurmaState extends State<FormularioTurma> {
   late bool _camposAtivos;
   late bool _botaoConfirmarVisivel;
 
-  final TurmaDao _turmaDao = TurmaDao();
   final TurmaService _turmaService = TurmaService();
 
   final TextEditingController _nomeController = TextEditingController();
@@ -54,6 +55,11 @@ class _FormularioTurmaState extends State<FormularioTurma> {
     } else if (widget.acaoTela == EnumAcaoTela.excluir) {
       if (await _turmaService.naoPossuiDependenciaAsync(widget.turma!.id)) {
         await excluiAsync();
+      } else {
+        if (mounted) {
+          Alerta(context).erro(
+              "Não é possível excluir a Turma pois ela está sendo utilizada em um modelo.");
+        }
       }
     }
   }
@@ -70,7 +76,7 @@ class _FormularioTurmaState extends State<FormularioTurma> {
   Future<void> incluiAsync() async {
     if (validacao()) {
       final Turma turma = cria();
-      await _turmaDao.inclui(turma);
+      context.read<TurmaProvider>().incluiAsync(turma);
       volta();
     }
   }
@@ -78,14 +84,14 @@ class _FormularioTurmaState extends State<FormularioTurma> {
   Future<void> alteraAsync() async {
     if (validacao()) {
       final Turma turma = cria();
-      await _turmaDao.altera(turma);
+      context.read<TurmaProvider>().alteraAsync(turma);
       volta();
     }
   }
 
   Future<void> excluiAsync() async {
     if (widget.turma!.id > 0) {
-      await _turmaDao.exclui(widget.turma!.id);
+      context.read<TurmaProvider>().excluiAsync(widget.turma!);
       volta();
     }
   }

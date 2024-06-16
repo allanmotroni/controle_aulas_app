@@ -14,38 +14,19 @@ class ListaEscola extends StatefulWidget {
 }
 
 class _ListaEscolaState extends State<ListaEscola> {
-  //final EscolaDao _escolaDao = EscolaDao();
-  //List<Escola> _escolas = [];
-
   void abrirFormularioEscola(EnumAcaoTela acaoTela, {Escola? escola}) async {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FormularioEscola(acaoTela, escola: escola),
       ),
-    )
-        // .then(
-        //   (onValue) => refresh(),
-        // )
-        ;
+    );
   }
-
-  // void carregarEscolas() {
-  //   _escolaDao.lista().then((escolas) => {
-  //         setState(() {
-  //           _escolas = escolas;
-  //         })
-  //       });
-  // }
 
   @override
   void initState() {
     context.read<EscolaProvider>().carregaAsync();
     super.initState();
   }
-
-  // void refresh() {
-  //   carregarEscolas();
-  // }
 
   @override
   Widget build(BuildContext context) {

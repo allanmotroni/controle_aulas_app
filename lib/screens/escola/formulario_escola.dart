@@ -1,6 +1,7 @@
 import 'package:controle_aulas_app/models/escola.dart';
 import 'package:controle_aulas_app/providers/escola_provider.dart';
 import 'package:controle_aulas_app/services/escola_service.dart';
+import 'package:controle_aulas_app/utils/alerta.dart';
 import 'package:controle_aulas_app/utils/utils.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,11 @@ class _FormularioEscolaState extends State<FormularioEscola> {
     } else if (widget.acaoTela == EnumAcaoTela.excluir) {
       if (await _escolaService.naoPossuiDependenciaAsync(widget.escola!.id)) {
         await excluiAsync();
+      } else {
+        if (mounted) {
+          Alerta(context).erro(
+              "Não é possível excluir a Escola pois ela está sendo utilizada em um modelo.");
+        }
       }
     }
   }

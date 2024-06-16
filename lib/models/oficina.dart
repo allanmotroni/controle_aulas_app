@@ -1,5 +1,5 @@
 class Oficina {
-  final int id;
+  int id;
   final String nome;
   final String? observacao;
   final bool ativo;
