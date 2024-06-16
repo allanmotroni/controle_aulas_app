@@ -56,8 +56,10 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
         widget.acaoTela != EnumAcaoTela.excluir;
   }
 
-  void volta(BuildContext context) {
-    Navigator.pop(context);
+  void volta() {
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   void confirma() {
@@ -87,7 +89,7 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
     if (validacao()) {
       final ModeloOficina model = cria();
       await _modeloOficinaDao.inclui(model);
-      volta(context);
+      volta();
     }
   }
 
@@ -95,14 +97,14 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
     if (validacao()) {
       final ModeloOficina model = cria();
       await _modeloOficinaDao.altera(model);
-      volta(context);
+      volta();
     }
   }
 
   void exclui() async {
     if (widget.modeloOficina!.id > 0) {
       await _modeloOficinaDao.exclui(widget.modeloOficina!.id);
-      volta(context);
+      volta();
     }
   }
 

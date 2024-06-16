@@ -46,8 +46,10 @@ class _FormularioModeloTurmaState extends State<FormularioModeloTurma> {
         widget.acaoTela != EnumAcaoTela.excluir;
   }
 
-  void volta(BuildContext context) {
-    Navigator.pop(context);
+  void volta() {
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   void confirma() {
@@ -73,7 +75,7 @@ class _FormularioModeloTurmaState extends State<FormularioModeloTurma> {
     if (validacao()) {
       final ModeloTurma model = cria();
       await _modeloTurmaDao.inclui(model);
-      volta(context);
+      volta();
     }
   }
 
@@ -81,14 +83,14 @@ class _FormularioModeloTurmaState extends State<FormularioModeloTurma> {
     if (validacao()) {
       final ModeloTurma model = cria();
       await _modeloTurmaDao.altera(model);
-      volta(context);
+      volta();
     }
   }
 
   void exclui() async {
     if (widget.modeloTurma!.id > 0) {
       await _modeloTurmaDao.exclui(widget.modeloTurma!.id);
-      volta(context);
+      volta();
     }
   }
 
