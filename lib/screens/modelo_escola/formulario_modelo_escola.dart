@@ -1,12 +1,16 @@
-import 'package:controle_aulas_app/database/dao/escola_dao.dart';
-import 'package:controle_aulas_app/database/dao/modelo_escola_dao.dart';
+// import 'package:controle_aulas_app/database/dao/escola_dao.dart';
+// import 'package:controle_aulas_app/database/dao/modelo_escola_dao.dart';
 import 'package:controle_aulas_app/models/dia_da_semana.dart';
 import 'package:controle_aulas_app/models/dias_da_semana.dart';
 import 'package:controle_aulas_app/models/escola.dart';
 import 'package:controle_aulas_app/models/modelo_escola.dart';
+import 'package:controle_aulas_app/providers/dropdown_escola_provider.dart';
+import 'package:controle_aulas_app/providers/escola_provider.dart';
+import 'package:controle_aulas_app/providers/modelo_escola_provider.dart';
 import 'package:controle_aulas_app/utils/utils.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FormularioModeloEscola extends StatefulWidget {
   final EnumAcaoTela acaoTela;
@@ -23,19 +27,19 @@ class _FormularioModeloEscolaState extends State<FormularioModeloEscola> {
   late bool _camposAtivos;
   late bool _botaoConfirmarVisivel;
 
-  final ModeloEscolaDao _modeloEscolaDao = ModeloEscolaDao();
-  final EscolaDao _escolaDao = EscolaDao();
-  late List<Escola> _escolas = [];
+  //final ModeloEscolaDao _modeloEscolaDao = ModeloEscolaDao();
+  //final EscolaDao _escolaDao = EscolaDao();
+  //late List<Escola> _escolas = [];
   final List<DiaDaSemana> _diasDaSemana = DiasDaSemana.list();
 
   int diaDaSemanaIdSelecionado = DateTime.now().weekday;
-  int escolaIdSelecionado = 0;
+  //int escolaIdSelecionado = 0;
   bool _ativo = true;
 
   void preencheDados() {
     if (widget.acaoTela != EnumAcaoTela.incluir) {
       diaDaSemanaIdSelecionado = widget.modeloEscola!.diaSemana;
-      escolaIdSelecionado = widget.modeloEscola!.escolaId;
+      //escolaIdChanged(widget.modeloEscola!.escolaId);
       _ativo = widget.modeloEscola!.ativo;
     }
   }
@@ -66,14 +70,14 @@ class _FormularioModeloEscolaState extends State<FormularioModeloEscola> {
     return ModeloEscola(
         widget.acaoTela == EnumAcaoTela.incluir ? 0 : widget.modeloEscola!.id,
         diaDaSemanaIdSelecionado,
-        escolaIdSelecionado,
+        context.read<DropdownEscolaProvider>().selecionado,
         ativo);
   }
 
   Future<void> incluiAsync() async {
     if (validacao()) {
       final ModeloEscola model = cria();
-      await _modeloEscolaDao.inclui(model);
+      await context.read<ModeloEscolaProvider>().incluiAsync(model);
       volta();
     }
   }
@@ -81,14 +85,16 @@ class _FormularioModeloEscolaState extends State<FormularioModeloEscola> {
   Future<void> alteraAsync() async {
     if (validacao()) {
       final ModeloEscola model = cria();
-      await _modeloEscolaDao.altera(model);
+      await context.read<ModeloEscolaProvider>().alteraAsync(model);
       volta();
     }
   }
 
   Future<void> excluiAsync() async {
     if (widget.modeloEscola!.id > 0) {
-      await _modeloEscolaDao.exclui(widget.modeloEscola!.id);
+      await context
+          .read<ModeloEscolaProvider>()
+          .excluiAsync(widget.modeloEscola!);
       volta();
     }
   }
@@ -96,7 +102,7 @@ class _FormularioModeloEscolaState extends State<FormularioModeloEscola> {
   bool validacao() {
     bool retorno = true;
 
-    if (escolaIdSelecionado == 0) {
+    if (context.read<DropdownEscolaProvider>().selecionado == 0) {
       retorno = false;
     }
     if (diaDaSemanaIdSelecionado == 0) {
@@ -121,40 +127,31 @@ class _FormularioModeloEscolaState extends State<FormularioModeloEscola> {
   }
 
   void escolaIdChanged(int? escolaId) {
-    if (escolaId != null) {
-      setState(() {
-        escolaIdSelecionado = escolaId;
-      });
-    }
+    context.read<DropdownEscolaProvider>().selecionado = escolaId!;
   }
 
   @override
   void initState() {
-    setState(() {
-      _titulo = Utils.obterDescricaoAcaoTela(widget.acaoTela);
-      preencheDados();
-      travaCampos();
-      _botaoConfirmarVisivel = widget.acaoTela != EnumAcaoTela.consultar;
-    });
-
+    _titulo = Utils.obterDescricaoAcaoTela(widget.acaoTela);
+    _botaoConfirmarVisivel = widget.acaoTela != EnumAcaoTela.consultar;
+    preencheDados();
+    travaCampos();
+    carregaEscolasAsync();
     super.initState();
-
-    carregaEscolas();
   }
 
-  void carregaEscolas() {
-    _escolaDao.lista().then((escolas) {
-      setState(() {
-        _escolas = escolas;
-        if (escolaIdSelecionado == 0) {
-          escolaIdSelecionado = _escolas[0].id;
-        }
-      });
-    });
+  Future<void> carregaEscolasAsync() async {
+    await context.read<EscolaProvider>().carregaAsync(ativos: true);
   }
 
   @override
   Widget build(BuildContext context) {
+    var escolas = context.watch<EscolaProvider>().escolas;
+    var selecionado = context.watch<DropdownEscolaProvider>().selecionado;
+    //if (escolas.isNotEmpty) {
+    //escolaIdChanged(escolas[0].id);
+    //}
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_titulo),
@@ -169,10 +166,10 @@ class _FormularioModeloEscolaState extends State<FormularioModeloEscola> {
                   child: DropdownButtonFormField<int>(
                     key: UniqueKey(),
                     isDense: false,
-                    value: escolaIdSelecionado,
-                    items: _escolas.isEmpty
+                    value: selecionado == 0 ? null : selecionado,
+                    items: escolas.isEmpty
                         ? null
-                        : _escolas.map((Escola escola) {
+                        : escolas.map((Escola escola) {
                             return DropdownMenuItem<int>(
                               value: escola.id,
                               child: Text(escola.nome),

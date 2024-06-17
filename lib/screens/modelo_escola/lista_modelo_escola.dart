@@ -1,9 +1,11 @@
 import 'package:controle_aulas_app/database/dao/modelo_escola_dao.dart';
 import 'package:controle_aulas_app/models/modelo_escola.dart';
+import 'package:controle_aulas_app/providers/dropdown_escola_provider.dart';
 import 'package:controle_aulas_app/screens/modelo_escola/formulario_modelo_escola.dart';
 import 'package:controle_aulas_app/screens/modelo_escola/widgets/item_modelo_escola.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListaModeloEscola extends StatefulWidget {
   const ListaModeloEscola({super.key});
@@ -18,6 +20,13 @@ class _ListaModeloEscolaState extends State<ListaModeloEscola> {
 
   void abrirFormularioModeloEscola(EnumAcaoTela acaoTela,
       {ModeloEscola? modeloEscola}) async {
+    if (acaoTela != EnumAcaoTela.incluir) {
+      context.read<DropdownEscolaProvider>().selecionado =
+          modeloEscola!.escolaId;
+    } else {
+      context.read<DropdownEscolaProvider>().selecionado = 0;
+    }
+
     Navigator.of(context)
         .push(
           MaterialPageRoute(
