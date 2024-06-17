@@ -59,7 +59,78 @@ class MyDateTime {
     return DateFormat(format).format(date);
   }
 
-  static String obtemDiaDaSemana(DateTime date) {
-    return "";
+  static String diaSemanaDescricao(int diaSemana) {
+    if (diaSemana == 1) {
+      return "Segunda-Feira";
+    }
+    if (diaSemana == 2) {
+      return "Terça-Feira";
+    }
+    if (diaSemana == 3) {
+      return "Quarta-Feira";
+    }
+    if (diaSemana == 4) {
+      return "Quinta-Feira";
+    }
+    if (diaSemana == 5) {
+      return "Sexta-Feira";
+    }
+    if (diaSemana == 6) {
+      return "Sábado";
+    }
+    if (diaSemana == 7) {
+      return "Domingo";
+    }
+    return "ERROR";
+  }
+
+  static String diaSemanaDescricaoCurta(int diaSemana) {
+    if (diaSemana == 1) {
+      return "Segunda";
+    }
+    if (diaSemana == 2) {
+      return "Terça";
+    }
+    if (diaSemana == 3) {
+      return "Quarta";
+    }
+    if (diaSemana == 4) {
+      return "Quinta";
+    }
+    if (diaSemana == 5) {
+      return "Sexta";
+    }
+    if (diaSemana == 6) {
+      return "Sábado";
+    }
+    if (diaSemana == 7) {
+      return "Domingo";
+    }
+    return "ERROR";
+  }
+
+  static String diaSemanaDescricaoSigla(int diaSemana) {
+    if (diaSemana == 1) {
+      return "Seg";
+    }
+    if (diaSemana == 2) {
+      return "Ter";
+    }
+    if (diaSemana == 3) {
+      return "Qua";
+    }
+    if (diaSemana == 4) {
+      return "Qui";
+    }
+    if (diaSemana == 5) {
+      return "Sex";
+    }
+    if (diaSemana == 6) {
+      return "Sab";
+    }
+    if (diaSemana == 7) {
+      return "Dom";
+    }
+    return "ERROR";
   }
 }

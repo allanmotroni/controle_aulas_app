@@ -40,9 +40,14 @@ class ModeloEscolaDao {
         .update(tableName, contaMap, where: '$id = ?', whereArgs: [model.id]);
   }
 
-  Future<List<ModeloEscola>> lista({bool escola = true}) async {
+  Future<List<ModeloEscola>> lista(
+      {bool ativos = false, bool escola = true}) async {
     final Database db = await getDatabase();
-    final List<Map<String, dynamic>> maps = await db.query(tableName);
+    final List<Map<String, dynamic>> maps = ativos
+        ? await db.query(tableName,
+            where: '${ModeloEscolaDao.ativo} = ?', whereArgs: [1])
+        : await db.query(tableName);
+
     final List<ModeloEscola> list = toList(maps);
 
     if (escola) {

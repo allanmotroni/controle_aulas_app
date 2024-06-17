@@ -4,6 +4,7 @@ import 'package:controle_aulas_app/database/dao/modelo_turma_dao.dart';
 import 'package:controle_aulas_app/models/modelo_oficina.dart';
 import 'package:controle_aulas_app/models/turma.dart';
 import 'package:controle_aulas_app/models/modelo_turma.dart';
+import 'package:controle_aulas_app/utils/my_date_time.dart';
 import 'package:controle_aulas_app/utils/utils.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
@@ -188,7 +189,7 @@ class _FormularioModeloTurmaState extends State<FormularioModeloTurma> {
                             return DropdownMenuItem<int>(
                               value: modeloOficina.id,
                               child: Text(
-                                  "${modeloOficina.oficina!.nome} - ${modeloOficina.modeloEscola!.diaSemanaDescricao()} - ${modeloOficina.duracao}h\n${modeloOficina.modeloEscola!.escola!.nome}\n${modeloOficina.valorFormatado()}/h"),
+                                  "${modeloOficina.oficina!.nome} - ${MyDateTime.diaSemanaDescricao(modeloOficina.modeloEscola!.diaSemana)} - ${modeloOficina.duracao}h\n${modeloOficina.modeloEscola!.escola!.nome}\n${modeloOficina.valorFormatado()}/h"),
                             );
                           }).toList(),
                     onChanged: _camposAtivos ? modeloOficinaIdChanged : null,

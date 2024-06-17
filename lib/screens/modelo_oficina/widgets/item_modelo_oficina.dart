@@ -1,6 +1,7 @@
 import 'package:controle_aulas_app/database/dao/modelo_oficina_dao.dart';
 import 'package:controle_aulas_app/models/modelo_oficina.dart';
 import 'package:controle_aulas_app/screens/modelo_oficina/formulario_modelo_oficina.dart';
+import 'package:controle_aulas_app/utils/my_date_time.dart';
 import 'package:controle_aulas_app/widgets/sub_menu.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,7 @@ class _ItemModeloOficinaState extends State<ItemModeloOficina> {
                   ? widget.modeloOficina.oficinaId.toString()
                   : widget.modeloOficina.oficina!.nome),
               subtitle: Text(
-                  "${widget.modeloOficina.modeloEscola!.diaSemanaDescricao()} - ${widget.modeloOficina.duracao}h\n${widget.modeloOficina.modeloEscola!.escola!.nome}\n${widget.modeloOficina.valorFormatado()}/h"),
+                  "${MyDateTime.diaSemanaDescricao(widget.modeloOficina.modeloEscola!.diaSemana)} - ${widget.modeloOficina.duracao}h\n${widget.modeloOficina.modeloEscola!.escola!.nome}\n${widget.modeloOficina.valorFormatado()}/h"),
               onTap: () async {
                 abrirFormularioModeloOficina();
               },

@@ -9,9 +9,9 @@ class EscolaProvider with ChangeNotifier {
 
   EscolaProvider(this.escolaDao);
 
-  Future<void> carregaAsync() async {
+  Future<void> carregaAsync({bool ativos = false}) async {
     if (_escolas.isEmpty) {
-      _escolas = await escolaDao.lista();
+      _escolas = await escolaDao.lista(ativos: ativos);
       notifyListeners();
     }
   }

@@ -1,9 +1,12 @@
 import 'package:controle_aulas_app/database/dao/modelo_escola_dao.dart';
 import 'package:controle_aulas_app/models/modelo_escola.dart';
+import 'package:controle_aulas_app/providers/dropdown_escola_provider.dart';
 import 'package:controle_aulas_app/screens/modelo_escola/formulario_modelo_escola.dart';
+import 'package:controle_aulas_app/utils/my_date_time.dart';
 import 'package:controle_aulas_app/widgets/sub_menu.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class ItemModeloEscola extends StatefulWidget {
@@ -20,6 +23,9 @@ class _ItemModeloEscolaState extends State<ItemModeloEscola> {
   final ModeloEscolaDao _modeloEscolaDao = ModeloEscolaDao();
 
   void abrirFormularioModeloEscola() {
+    context.read<DropdownEscolaProvider>().selecionado =
+        widget.modeloEscola.escolaId;
+
     Navigator.of(context)
         .push(
           MaterialPageRoute(
@@ -64,7 +70,8 @@ class _ItemModeloEscolaState extends State<ItemModeloEscola> {
               title: Text(widget.modeloEscola.escola == null
                   ? widget.modeloEscola.escolaId.toString()
                   : widget.modeloEscola.escola!.nome),
-              subtitle: Text(widget.modeloEscola.diaSemanaDescricao()),
+              subtitle: Text(
+                  MyDateTime.diaSemanaDescricao(widget.modeloEscola.diaSemana)),
               onTap: () async {
                 abrirFormularioModeloEscola();
               },

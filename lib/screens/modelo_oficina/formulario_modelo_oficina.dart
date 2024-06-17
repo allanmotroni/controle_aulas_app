@@ -5,6 +5,7 @@ import 'package:controle_aulas_app/models/modelo_escola.dart';
 import 'package:controle_aulas_app/models/oficina.dart';
 import 'package:controle_aulas_app/models/modelo_oficina.dart';
 import 'package:controle_aulas_app/utils/configuracao.dart';
+import 'package:controle_aulas_app/utils/my_date_time.dart';
 import 'package:controle_aulas_app/utils/utils.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
@@ -215,7 +216,7 @@ class _FormularioModeloOficinaState extends State<FormularioModeloOficina> {
                               return DropdownMenuItem<int>(
                                 value: modeloEscola.id,
                                 child: Text(
-                                    "${modeloEscola.escola!.nome}\n${modeloEscola.diaSemanaDescricao()}"),
+                                    "${modeloEscola.escola!.nome}\n${MyDateTime.diaSemanaDescricao(modeloEscola.diaSemana)}"),
                               );
                             }).toList(),
                       onChanged: _camposAtivos ? modeloEscolaIdChanged : null,

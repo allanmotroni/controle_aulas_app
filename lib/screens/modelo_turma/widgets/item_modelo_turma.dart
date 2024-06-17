@@ -1,6 +1,7 @@
 import 'package:controle_aulas_app/database/dao/modelo_turma_dao.dart';
 import 'package:controle_aulas_app/models/modelo_turma.dart';
 import 'package:controle_aulas_app/screens/modelo_turma/formulario_modelo_turma.dart';
+import 'package:controle_aulas_app/utils/my_date_time.dart';
 import 'package:controle_aulas_app/widgets/sub_menu.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class _ItemModeloTurmaState extends State<ItemModeloTurma> {
                   ? widget.modeloTurma.turmaId.toString()
                   : widget.modeloTurma.turma!.nome),
               subtitle: Text(
-                  "${widget.modeloTurma.modeloOficina!.oficina!.nome}\n${widget.modeloTurma.modeloOficina!.modeloEscola!.diaSemanaDescricao()} - ${widget.modeloTurma.modeloOficina!.duracao}h\n${widget.modeloTurma.modeloOficina!.modeloEscola!.escola!.nome}\n${widget.modeloTurma.modeloOficina!.valorFormatado()}/h"),
+                  "${widget.modeloTurma.modeloOficina!.oficina!.nome}\n${MyDateTime.diaSemanaDescricao(widget.modeloTurma.modeloOficina!.modeloEscola!.diaSemana)} - ${widget.modeloTurma.modeloOficina!.duracao}h\n${widget.modeloTurma.modeloOficina!.modeloEscola!.escola!.nome}\n${widget.modeloTurma.modeloOficina!.valorFormatado()}/h"),
               onTap: () async {
                 abrirFormularioModeloTurma();
               },
