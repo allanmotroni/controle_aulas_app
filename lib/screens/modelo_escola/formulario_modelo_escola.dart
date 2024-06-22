@@ -1,5 +1,3 @@
-// import 'package:controle_aulas_app/database/dao/escola_dao.dart';
-// import 'package:controle_aulas_app/database/dao/modelo_escola_dao.dart';
 import 'package:controle_aulas_app/models/dia_da_semana.dart';
 import 'package:controle_aulas_app/models/dias_da_semana.dart';
 import 'package:controle_aulas_app/models/escola.dart';
@@ -27,19 +25,14 @@ class _FormularioModeloEscolaState extends State<FormularioModeloEscola> {
   late bool _camposAtivos;
   late bool _botaoConfirmarVisivel;
 
-  //final ModeloEscolaDao _modeloEscolaDao = ModeloEscolaDao();
-  //final EscolaDao _escolaDao = EscolaDao();
-  //late List<Escola> _escolas = [];
   final List<DiaDaSemana> _diasDaSemana = DiasDaSemana.list();
 
   int diaDaSemanaIdSelecionado = DateTime.now().weekday;
-  //int escolaIdSelecionado = 0;
   bool _ativo = true;
 
   void preencheDados() {
     if (widget.acaoTela != EnumAcaoTela.incluir) {
       diaDaSemanaIdSelecionado = widget.modeloEscola!.diaSemana;
-      //escolaIdChanged(widget.modeloEscola!.escolaId);
       _ativo = widget.modeloEscola!.ativo;
     }
   }
@@ -148,9 +141,6 @@ class _FormularioModeloEscolaState extends State<FormularioModeloEscola> {
   Widget build(BuildContext context) {
     var escolas = context.watch<EscolaProvider>().escolas;
     var selecionado = context.watch<DropdownEscolaProvider>().selecionado;
-    //if (escolas.isNotEmpty) {
-    //escolaIdChanged(escolas[0].id);
-    //}
 
     return Scaffold(
       appBar: AppBar(
