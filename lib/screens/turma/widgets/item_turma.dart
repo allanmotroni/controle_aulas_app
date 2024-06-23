@@ -1,53 +1,27 @@
-import 'package:controle_aulas_app/database/dao/turma_dao.dart';
 import 'package:controle_aulas_app/models/turma.dart';
 import 'package:controle_aulas_app/screens/turma/formulario_turma.dart';
 import 'package:controle_aulas_app/widgets/sub_menu.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class ItemTurma extends StatefulWidget {
-  Turma turma;
+  final Turma turma;
   final Function(EnumAcaoTela, Turma) onAbrirFormulario;
 
-  ItemTurma(this.turma, this.onAbrirFormulario, {super.key});
+  const ItemTurma(this.turma, this.onAbrirFormulario, {super.key});
 
   @override
   State<ItemTurma> createState() => _ItemTurmaState();
 }
 
 class _ItemTurmaState extends State<ItemTurma> {
-  final TurmaDao _turmaDao = TurmaDao();
-
   void abrirFormularioTurma() {
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute(
-            builder: (context) =>
-                FormularioTurma(EnumAcaoTela.consultar, turma: widget.turma),
-          ),
-        )
-        .then((value) => refresh());
-  }
-
-  void refresh() {
-    carregaTurma();
-  }
-
-  void carregaTurma() {
-    _turmaDao.obterPorId(widget.turma.id).then((turma) {
-      if (turma != null) {
-        setState(() {
-          widget.turma = turma;
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    refresh();
-    super.initState();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) =>
+            FormularioTurma(EnumAcaoTela.consultar, turma: widget.turma),
+      ),
+    );
   }
 
   @override

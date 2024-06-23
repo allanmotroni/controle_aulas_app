@@ -42,9 +42,14 @@ class ModeloTurmaDao {
   }
 
   Future<List<ModeloTurma>> lista(
-      {bool modeloOficina = true, bool turma = true}) async {
+      {bool ativos = false,
+      bool modeloOficina = true,
+      bool turma = true}) async {
     final Database db = await getDatabase();
-    final List<Map<String, dynamic>> maps = await db.query(tableName);
+    final List<Map<String, dynamic>> maps = ativos
+        ? await db.query(tableName,
+            where: '${ModeloTurmaDao.ativo} = ?', whereArgs: [1])
+        : await db.query(tableName);
     final List<ModeloTurma> list = toList(maps);
 
     if (modeloOficina || turma) {

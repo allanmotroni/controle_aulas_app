@@ -1,53 +1,27 @@
-import 'package:controle_aulas_app/database/dao/escola_dao.dart';
 import 'package:controle_aulas_app/models/escola.dart';
 import 'package:controle_aulas_app/screens/escola/formulario_escola.dart';
 import 'package:controle_aulas_app/widgets/sub_menu.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class ItemEscola extends StatefulWidget {
-  Escola escola;
+  final Escola escola;
   final Function(EnumAcaoTela, Escola) onAbrirFormulario;
 
-  ItemEscola(this.escola, this.onAbrirFormulario, {super.key});
+  const ItemEscola(this.escola, this.onAbrirFormulario, {super.key});
 
   @override
   State<ItemEscola> createState() => _ItemEscolaState();
 }
 
 class _ItemEscolaState extends State<ItemEscola> {
-  final EscolaDao _escolaDao = EscolaDao();
-
   void abrirFormularioEscola() {
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute(
-            builder: (context) =>
-                FormularioEscola(EnumAcaoTela.consultar, escola: widget.escola),
-          ),
-        )
-        .then((value) => refresh());
-  }
-
-  void refresh() {
-    carregaEscola();
-  }
-
-  void carregaEscola() {
-    _escolaDao.obterPorId(widget.escola.id).then((escola) {
-      if (escola != null) {
-        setState(() {
-          widget.escola = escola;
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    refresh();
-    super.initState();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) =>
+            FormularioEscola(EnumAcaoTela.consultar, escola: widget.escola),
+      ),
+    );
   }
 
   @override

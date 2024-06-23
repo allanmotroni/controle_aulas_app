@@ -1,3 +1,4 @@
+import 'package:controle_aulas_app/database/dao/escola_dao.dart';
 import 'package:controle_aulas_app/database/dao/modelo_escola_dao.dart';
 import 'package:controle_aulas_app/models/modelo_escola.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,9 @@ class ModeloEscolaProvider with ChangeNotifier {
   List<ModeloEscola> get modeloEscolas => _modeloEscolas;
 
   final ModeloEscolaDao modeloEscolaDao;
+  final EscolaDao escolaDao;
 
-  ModeloEscolaProvider(this.modeloEscolaDao);
+  ModeloEscolaProvider(this.modeloEscolaDao, this.escolaDao);
 
   Future<void> carregaAsync({bool ativos = false}) async {
     if (_modeloEscolas.isEmpty) {
@@ -20,6 +22,8 @@ class ModeloEscolaProvider with ChangeNotifier {
   Future<void> incluiAsync(ModeloEscola modeloEscola) async {
     modeloEscola.id = await modeloEscolaDao.inclui(modeloEscola);
 
+    modeloEscola.escola = await escolaDao.obterPorId(modeloEscola.escolaId);
+
     _modeloEscolas.add(modeloEscola);
 
     notifyListeners();
@@ -27,6 +31,8 @@ class ModeloEscolaProvider with ChangeNotifier {
 
   Future<void> alteraAsync(ModeloEscola modeloEscola) async {
     await modeloEscolaDao.altera(modeloEscola);
+
+    modeloEscola.escola = await escolaDao.obterPorId(modeloEscola.escolaId);
 
     _modeloEscolas.removeWhere((element) => element.id == modeloEscola.id);
 

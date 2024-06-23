@@ -1,6 +1,6 @@
-import 'package:controle_aulas_app/database/dao/modelo_escola_dao.dart';
 import 'package:controle_aulas_app/models/modelo_escola.dart';
 import 'package:controle_aulas_app/providers/dropdown_escola_provider.dart';
+import 'package:controle_aulas_app/providers/modelo_escola_provider.dart';
 import 'package:controle_aulas_app/screens/modelo_escola/formulario_modelo_escola.dart';
 import 'package:controle_aulas_app/screens/modelo_escola/widgets/item_modelo_escola.dart';
 import 'package:controle_aulas_app/utils/variaveis.dart';
@@ -15,9 +15,6 @@ class ListaModeloEscola extends StatefulWidget {
 }
 
 class _ListaModeloEscolaState extends State<ListaModeloEscola> {
-  final ModeloEscolaDao _modeloEscolaDao = ModeloEscolaDao();
-  List<ModeloEscola> _modeloEscolas = [];
-
   void abrirFormularioModeloEscola(EnumAcaoTela acaoTela,
       {ModeloEscola? modeloEscola}) async {
     if (acaoTela != EnumAcaoTela.incluir) {
@@ -27,34 +24,18 @@ class _ListaModeloEscolaState extends State<ListaModeloEscola> {
       context.read<DropdownEscolaProvider>().selecionado = 0;
     }
 
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute(
-            builder: (context) =>
-                FormularioModeloEscola(acaoTela, modeloEscola: modeloEscola),
-          ),
-        )
-        .then(
-          (onValue) => refresh(),
-        );
-  }
-
-  void carregar() {
-    _modeloEscolaDao.lista().then((modeloEscolas) => {
-          setState(() {
-            _modeloEscolas = modeloEscolas;
-          })
-        });
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) =>
+            FormularioModeloEscola(acaoTela, modeloEscola: modeloEscola),
+      ),
+    );
   }
 
   @override
   void initState() {
-    refresh();
+    context.read<ModeloEscolaProvider>().carregaAsync();
     super.initState();
-  }
-
-  void refresh() {
-    carregar();
   }
 
   @override
@@ -63,14 +44,20 @@ class _ListaModeloEscolaState extends State<ListaModeloEscola> {
       appBar: AppBar(
         title: const Text("Modelo Escolas"),
       ),
-      body: ListView.builder(
-        itemCount: _modeloEscolas.length,
-        itemBuilder: (BuildContext context, int index) {
-          final ModeloEscola modeloEscola = _modeloEscolas[index];
-          return ItemModeloEscola(
-            modeloEscola,
-            (acaoTela, escola) => abrirFormularioModeloEscola(acaoTela,
-                modeloEscola: modeloEscola),
+      body: Consumer<ModeloEscolaProvider>(
+        builder: (BuildContext context,
+            ModeloEscolaProvider modeloEscolaProvider, _) {
+          return ListView.builder(
+            itemCount: modeloEscolaProvider.modeloEscolas.length,
+            itemBuilder: (BuildContext context, int index) {
+              final ModeloEscola modeloEscola =
+                  modeloEscolaProvider.modeloEscolas[index];
+              return ItemModeloEscola(
+                modeloEscola,
+                (acaoTela, escola) => abrirFormularioModeloEscola(acaoTela,
+                    modeloEscola: modeloEscola),
+              );
+            },
           );
         },
       ),

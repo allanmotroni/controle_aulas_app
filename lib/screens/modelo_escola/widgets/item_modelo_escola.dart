@@ -1,4 +1,3 @@
-import 'package:controle_aulas_app/database/dao/modelo_escola_dao.dart';
 import 'package:controle_aulas_app/models/modelo_escola.dart';
 import 'package:controle_aulas_app/providers/dropdown_escola_provider.dart';
 import 'package:controle_aulas_app/screens/modelo_escola/formulario_modelo_escola.dart';
@@ -8,52 +7,28 @@ import 'package:controle_aulas_app/utils/variaveis.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// ignore: must_be_immutable
 class ItemModeloEscola extends StatefulWidget {
-  ModeloEscola modeloEscola;
+  final ModeloEscola modeloEscola;
   final Function(EnumAcaoTela, ModeloEscola) onAbrirFormulario;
 
-  ItemModeloEscola(this.modeloEscola, this.onAbrirFormulario, {super.key});
+  const ItemModeloEscola(this.modeloEscola, this.onAbrirFormulario,
+      {super.key});
 
   @override
   State<ItemModeloEscola> createState() => _ItemModeloEscolaState();
 }
 
 class _ItemModeloEscolaState extends State<ItemModeloEscola> {
-  final ModeloEscolaDao _modeloEscolaDao = ModeloEscolaDao();
-
   void abrirFormularioModeloEscola() {
     context.read<DropdownEscolaProvider>().selecionado =
         widget.modeloEscola.escolaId;
 
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute(
-            builder: (context) => FormularioModeloEscola(EnumAcaoTela.consultar,
-                modeloEscola: widget.modeloEscola),
-          ),
-        )
-        .then((value) => refresh());
-  }
-
-  void refresh() {
-    carrega();
-  }
-
-  void carrega() {
-    _modeloEscolaDao.obterPorId(widget.modeloEscola.id).then((modeloEscola) {
-      if (modeloEscola != null) {
-        setState(() {
-          widget.modeloEscola = modeloEscola;
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    refresh();
-    super.initState();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => FormularioModeloEscola(EnumAcaoTela.consultar,
+            modeloEscola: widget.modeloEscola),
+      ),
+    );
   }
 
   @override

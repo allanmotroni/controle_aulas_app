@@ -3,7 +3,7 @@ import 'package:controle_aulas_app/models/oficina.dart';
 import 'package:controle_aulas_app/utils/converts.dart';
 
 class ModeloOficina {
-  final int id;
+  int id;
   final int modeloEscolaId;
   final int oficinaId;
   final int duracao;
